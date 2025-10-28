@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
-        title: 'Namer App',
+        title: 'LDSW Actividad Widgets',
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
@@ -27,6 +27,11 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
+
+  void getNext() {
+    current = WordPair.random();
+    notifyListeners();
+  }
 }
 
 class MyHomePage extends StatelessWidget {
@@ -36,30 +41,93 @@ class MyHomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Welcome to Flutter'),
+        title: Text('Widgets en Flutter'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Hello World',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold,
+        // CONTAINER → actúa como contenedor principal
+        child: Container(
+          width: 300,
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.orange.shade50,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.orange.withOpacity(0.3),
+                blurRadius: 10,
+                offset: Offset(3, 3),
+              )
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // TEXT
+              Text(
+                'Ejemplo con Widgets básicos',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: Colors.deepOrange,
+                      fontWeight: FontWeight.bold,
+                    ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20),
+
+              // ROW
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.lightbulb, color: Colors.amber, size: 30),
+                  SizedBox(width: 10),
+                  Text(
+                    'Palabra aleatoria:',
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Palabra aleatoria:',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            Text(
-              appState.current.asLowerCase,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
+                ],
+              ),
+              SizedBox(height: 10),
+
+              // TEXT dinámico
+              Text(
+                appState.current.asPascalCase,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontSize: 22,
+                      color: Colors.deepOrange,
+                    ),
+              ),
+              SizedBox(height: 30),
+
+              // STACK → Superposición de elementos
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      color: Colors.deepOrange.shade100,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  Icon(Icons.star, color: Colors.deepOrange, size: 50),
+                  Text(
+                    '⭐',
+                    style: TextStyle(fontSize: 40),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30),
+
+              ElevatedButton.icon(
+                onPressed: () {
+                  appState.getNext();
+                },
+                icon: Icon(Icons.refresh),
+                label: Text('Generar nueva palabra'),
+              ),
+            ],
+          ),
         ),
       ),
     );
